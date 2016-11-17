@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1446667730 source:c:\home\dr.xperience\mega\megasync\shared\code blocks\binarytreeconstruction\main.cpp
+
+1479214068 source:c:\home\dr.xperience\mega\megasync\shared\code blocks\binarytreeconstruction\src\binarytree.cpp
+	"BinaryTree.h"
+	<queue>
+
+1479218051 c:\home\dr.xperience\mega\megasync\shared\code blocks\binarytreeconstruction\include\binarytree.h
+	"BinaryTree.cpp"
+
+1479214068 c:\home\dr.xperience\mega\megasync\shared\code blocks\binarytreeconstruction\src\binarytree.cpp
+	"BinaryTree.h"
+	<queue>
+
