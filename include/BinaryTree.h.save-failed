@@ -1,0 +1,58 @@
+/****************************************************************************
+    BinaryTreeConstruction Library (With just method to create a binary tree in BFS fashion (Level by level)).
+    Copyright (C) 2016  Anubhav Arun <dr.xperience@gmail.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*****************************************************************************/
+
+#ifndef BINARYTREE_H
+#define BINARYTREE_H
+
+template <class T>
+class BinaryTree
+{
+private:
+
+
+public:
+
+    //Constructor
+    BinaryTree();
+    BinaryTree(T);
+    BinaryTree(BinaryTree&);
+    virtual ~BinaryTree();
+
+    //Member Function
+    void insert(T data);
+    void insertInteractive(T (*process)(long id,bool& cont));
+    void appendBack(BinaryTree&);
+
+protected:
+
+    struct Node
+    {
+        long id;
+        T data;
+        Node * left = nullptr;
+        Node * right = nullptr;
+    };
+
+    Node* root;
+
+    long id,totalNodes;
+
+};
+
+#endif // BINARYTREE_H
