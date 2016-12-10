@@ -20,6 +20,8 @@
 #ifndef BINARYTREE_H
 #define BINARYTREE_H
 
+#include <queue>
+
 /** Total Code re-base Now node will be integral part of BinaryTree
   * And T will signify the datatype of Node's data
   * Tree may take nullptr as data, if and only if T is of T* i.e. pointer type
@@ -72,13 +74,24 @@ public:
 
     virtual ~BinaryTree();
 
-    //Member Function for T being a pointer type
+    //Member Functions for T being a pointer type
+
     /** insert method complexity is N*N that N^2.
       * This is so because
       * Worst case scenario, to place Nth node it has to traverse N-(No of leave nodes) nodes
       */
     template<typename TT = T>
-    void insert(TT data,typename std::enable_if<isPointer<TT>::value>::type * = nullptr);
+    int insert(TT data,typename std::enable_if<isPointer<TT>::value>::type * = nullptr);
+
+    /** Overloaded and Improved insert method which takes a buffer on input values (a std::queue)
+      * And fills it in the empty spaces while traversing BFD
+      * Complexity ?? (Probably should be better, like something around N+m,
+      *                where N is total no. of nodes in tree and m total no of notes in queue)
+      * Will test it by replacing it against the creatN method in memory benchmark
+      */
+    template<typename TT = T>
+    int insert(std::queue<TT> stream , typename std::enable_if<isPointer<TT>::value>::type * = nullptr);
+
 
     template<typename TT = T>
     void insertInteractive(T (*process)(long id,bool& skip,bool& cont),typename std::enable_if<isPointer<TT>::value>::type * = nullptr);
@@ -89,6 +102,9 @@ public:
     //Member Function for T being a non pointer type
     template<typename TT = T>
     void insert(TT data,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
+
+    template<typename TT = T>
+    void insert(std::queue<TT> stream, typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
 
     template<typename TT = T>
     void insertInteractive(T (*process)(long id,bool& skip,bool& cont),typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);

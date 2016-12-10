@@ -338,18 +338,16 @@ BinaryTree<T>::~BinaryTree()
 **/
 
 template <class T> template <typename TT>
-void BinaryTree<T>::insert(TT data,typename std::enable_if<isPointer<TT>::value>::type *a)
+int BinaryTree<T>::insert(TT data,typename std::enable_if<isPointer<TT>::value>::type *a)
 {
 
     if(this->root == nullptr )
     {
-        if(isPointer<T>::value == true)
-        {
+
             if(data == nullptr)
             {
-                return;
+                return -1;
             }
-        }
 
         this->root = new Node;
         this->root->id=1;
@@ -380,6 +378,8 @@ void BinaryTree<T>::insert(TT data,typename std::enable_if<isPointer<TT>::value>
         }
         else
         {
+            if(data == nullptr)
+                return -1;
             temp = new Node;
             temp->id=root.id*2;
             temp->data=data;
@@ -396,6 +396,8 @@ void BinaryTree<T>::insert(TT data,typename std::enable_if<isPointer<TT>::value>
         }
         else
         {
+            if(data == nullptr)
+                return -1;
             temp = new Node;
             temp->id=(root.id*2)+1;
             temp->data=data;
@@ -407,8 +409,102 @@ void BinaryTree<T>::insert(TT data,typename std::enable_if<isPointer<TT>::value>
         }
     }
 
+    return 0;
 }
 
+    /** Overloaded and Improved insert method which takes a buffer on input values (a std::queue)
+      * And fills it in the empty spaces while traversing BFD
+      * Complexity ?? (Probably should be better, like something around N+m,
+      *                where N is total no. of nodes in tree and m total no of notes in queue)
+      * Will test it by replacing it against the creatN method in memory benchmark
+      */
+
+template<class T> template <typename TT>
+int BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<isPointer<TT>::value>::type *a)
+{
+    #ifdef DEBUG
+    long counter=0;
+    #endif // DEBUG
+
+    if(this->root == nullptr )
+    {
+        if(stream.empty() || stream.front() == nullptr)
+        {
+            return -1;
+        }
+
+        this->root = new Node;
+        this->root->id=1;
+        this->root->data=stream.front();
+        stream.pop();
+        this->root->left=this->root->right=nullptr;
+        this->id=this->totalNodes=1;
+    }
+//    if(data ==nullptr)
+//    {
+//         id++;
+//         return;
+//    }
+//
+    Node * root=this->root,*temp;
+
+    std::queue<Node*> q;
+
+    q.push(root);
+
+    while(!stream.empty())
+    {
+        #ifdef DEBUG
+        counter++;
+        #endif // DEBUG
+
+        root=q.front();q.pop();
+
+        if(root->left != nullptr)
+        {
+            q.push(root->left);
+        }
+        else
+        {
+            if(stream.front == nullptr)
+                return -1;
+            temp = new Node;
+            temp->id=root.id*2;
+            temp->data=stream.front();
+            stream.pop();
+            temp->left=temp->right=nullptr;
+            root->left=temp;
+
+            q.push(root->left);
+            this->totalNodes++;
+        }
+
+        if(root->right != nullptr)
+        {
+            q.push(root->right);
+        }
+        else
+        {
+            if(stream.front == nullptr)
+                return -1;
+            temp = new Node;
+            temp->id=(root.id*2)+1;
+            temp->data=stream.front();
+            stream.pop();
+            temp->left=temp->right=nullptr;
+            root->right=temp;
+
+            q.push(root->right);
+            this->totalNodes++;
+        }
+    }
+
+    #ifdef DEBUG
+    std::cout<<std::endl<<"Insertion Loop Counter :: "<<counter<<std::endl;
+    #endif // DEBUG
+
+ return 0;
+}
 template <class T> template <typename TT>
 void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont),typename std::enable_if<isPointer<TT>::value>::type *a)
 {
@@ -678,6 +774,82 @@ void BinaryTree<T>::insert(TT data, typename std::enable_if<!isPointer<TT>::valu
         }
     }
 
+}
+
+template<class T> template <typename TT>
+void BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<!isPointer<TT>::value>::type *a)
+{
+    #ifdef DEBUG
+    long counter=0;
+    #endif // DEBUG
+
+    if(this->root == nullptr )
+    {
+        this->root = new Node;
+        this->root->id=1;
+        this->root->data=stream.front();
+        stream.pop();
+        this->root->left=this->root->right=nullptr;
+        this->id=this->totalNodes=1;
+    }
+//    if(data ==nullptr)
+//    {
+//         id++;
+//         return;
+//    }
+//
+    Node * root=this->root,*temp;
+
+    std::queue<Node*> q;
+
+    q.push(root);
+
+    while(!stream.empty())
+    {
+        #ifdef DEBUG
+        counter++;
+        #endif // DEBUG
+
+        root=q.front();q.pop();
+
+        if(root->left != nullptr)
+        {
+            q.push(root->left);
+        }
+        else
+        {
+            temp = new Node;
+            temp->id=root->id*2;
+            temp->data=stream.front();
+            stream.pop();
+            temp->left=temp->right=nullptr;
+            root->left=temp;
+
+            q.push(root->left);
+            this->totalNodes++;
+        }
+
+        if(root->right != nullptr)
+        {
+            q.push(root->right);
+        }
+        else
+        {
+            temp = new Node;
+            temp->id=(root->id*2)+1;
+            temp->data=stream.front();
+            stream.pop();
+            temp->left=temp->right=nullptr;
+            root->right=temp;
+
+            q.push(root->right);
+            this->totalNodes++;
+        }
+    }
+
+#ifdef DEBUG
+std::cout<<std::endl<<"Insertion Loop Counter :: "<<counter<<std::endl;
+#endif // DEBUG
 }
 
 template <class T> template <typename TT>
