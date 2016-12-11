@@ -119,7 +119,7 @@ protected:
 
     struct Node
     {
-        long id;
+        unsigned long id;
         T data;
         Node * left = nullptr;
         Node * right = nullptr;

@@ -508,7 +508,7 @@ int BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<isPoint
 template <class T> template <typename TT>
 void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont),typename std::enable_if<isPointer<TT>::value>::type *a)
 {
-    Node* root=this->root,temp;
+    Node* root,*temp;
     T data;
     long id=1;
     bool cont=true,skip=false;
@@ -517,14 +517,11 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont
     {
         data = process(1,skip,cont);
 
-        if(isPointer<T>::value == true)
-        {
             if(data == nullptr || skip==true)
             {
                 return;
             }
 
-        }
 
         this->root = new Node;
         this->root->id=1;
@@ -533,7 +530,7 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont
         this->id=this->totalNodes=1;
     }
 
-
+   root=this->root;
    std::queue<Node*> q;
 
     q.push(root);
@@ -550,17 +547,15 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont
         {
            data = process(root->id*2,skip,cont);
 
-           if(isPointer<T>::value==true)
-           {
-               if(skip==true || data == nullptr)
-                continue;
-           }
-
-
-           temp = new Node;
-           temp->id = (root->id)*2;
-           temp->data = data;
-           temp->left=temp->right=nullptr;
+            if(skip!=true || data != nullptr)
+            {
+                temp = new Node;
+                temp->id = (root->id)*2;
+                temp->data = data;
+                temp->left=temp->right=nullptr;
+                root->left=temp;
+                q.push(root->left);
+            }
         }
 
         if(root->right != nullptr)
@@ -571,17 +566,15 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont
         {
            data = process((root->id*2)+1,skip,cont);
 
-           if(isPointer<T>::value==true)
-           {
-               if(skip==true || data == nullptr)
-                continue;
-           }
-
-           temp = new Node;
-           temp->id = ((root->id)*2)+1;
-           temp->data = data;
-           temp->left=temp->right=nullptr;
-
+            if(skip==true || data == nullptr)
+            {
+                temp = new Node;
+                temp->id = ((root->id)*2)+1;
+                temp->data = data;
+                temp->left=temp->right=nullptr;
+                root->right=temp;
+                q.push(root->right);
+            }
         }
     }
 }
@@ -855,7 +848,7 @@ std::cout<<std::endl<<"Insertion Loop Counter :: "<<counter<<std::endl;
 template <class T> template <typename TT>
 void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont), typename std::enable_if<!isPointer<TT>::value>::type *a)
 {
-    Node* root=this->root,temp;
+    Node* root,*temp;
     T data;
     long id=1;
     bool cont=true,skip=false;
@@ -864,13 +857,9 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont
     {
         data = process(1,skip,cont);
 
-        if(isPointer<T>::value == true)
+        if(skip==true)
         {
-            if(skip==true)
-            {
-                return;
-            }
-
+            return;
         }
 
         this->root = new Node;
@@ -880,14 +869,14 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont
         this->id=this->totalNodes=1;
     }
 
-
+   root = this->root;
    std::queue<Node*> q;
 
     q.push(root);
 
     while(cont==true && !q.empty())
     {
-        root=q.front(); q.pop();
+        root=q.front();q.pop();
 
         if(root->left != nullptr)
         {
@@ -895,12 +884,17 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont
         }
         else
         {
-           data = process(root->id*2,skip,cont);
+            data = process(root->id*2,skip,cont);
 
-           temp = new Node;
-           temp->id = (root->id)*2;
-           temp->data = data;
-           temp->left=temp->right=nullptr;
+            if(skip==false)
+            {
+                temp = new Node;
+                temp->id = (root->id)*2;
+                temp->data = data;
+                temp->left=temp->right=nullptr;
+                root->left = temp;
+                q.push(root->left);
+            }
         }
 
         if(root->right != nullptr)
@@ -909,19 +903,17 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont
         }
         else
         {
-           data = process((root->id*2)+1,skip,cont);
+            data = process((root->id*2)+1,skip,cont);
 
-           if(isPointer<T>::value==true)
-           {
-               if(skip==true)
-                continue;
-           }
-
-           temp = new Node;
-           temp->id = ((root->id)*2)+1;
-           temp->data = data;
-           temp->left=temp->right=nullptr;
-
+            if(skip==false)
+            {
+                temp = new Node;
+                temp->id = ((root->id)*2)+1;
+                temp->data = data;
+                temp->left=temp->right=nullptr;
+                root->right = temp;
+                q.push(root->right);
+            }
         }
     }
 }
