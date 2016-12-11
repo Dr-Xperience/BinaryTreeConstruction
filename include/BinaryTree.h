@@ -113,7 +113,7 @@ public:
     void appendBack(BinaryTree&,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
 
     /** Warning only for benchmarking */
-    void createN(long n);
+    void createN(unsigned long n);
 
 protected:
 
