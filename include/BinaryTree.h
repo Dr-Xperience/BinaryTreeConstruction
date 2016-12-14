@@ -20,7 +20,7 @@
 #ifndef BINARYTREE_H
 #define BINARYTREE_H
 
-#include <queue>
+#include <list>
 
 /** Total Code re-base Now node will be integral part of BinaryTree
   * And T will signify the datatype of Node's data
@@ -90,7 +90,7 @@ public:
       * Will test it by replacing it against the creatN method in memory benchmark
       */
     template<typename TT = T>
-    int insert(std::queue<TT> stream , typename std::enable_if<isPointer<TT>::value>::type * = nullptr);
+    int insert(std::list<TT> stream , typename std::enable_if<isPointer<TT>::value>::type * = nullptr);
 
 
     template<typename TT = T>
@@ -104,13 +104,16 @@ public:
     void insert(TT data,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
 
     template<typename TT = T>
-    void insert(std::queue<TT> stream, typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
+    void insert(std::list<TT> stream, typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
 
     template<typename TT = T>
     void insertInteractive(T (*process)(long id,bool& skip,bool& cont),typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
 
     template<typename TT = T>
     void appendBack(BinaryTree&,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
+
+    template<typename TT = T>
+    void clear(typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
 
     /** Warning only for benchmarking */
     void createN(unsigned long n);

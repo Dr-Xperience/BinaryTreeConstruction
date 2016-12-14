@@ -23,7 +23,7 @@
 #include<iostream>
 #endif // DEBUG
 
-#include <queue>
+#include <list>
 #include "BinaryTree.h"
 
 /** Total Code re-base Now node will be integral part of BinaryTree
@@ -82,7 +82,7 @@ BinaryTree<T>::BinaryTree(TT data, typename std::enable_if<isPointer<TT>::value>
 
 
 //Copy Constructor
-//Parametrized Constructor for taking in a BinaryTree root (data or T being a pointer)
+//Parametrized Constructor for taking in a BinaryTree (data or T being a pointer)
 template<class T> template<typename TT>
 BinaryTree<T>::BinaryTree(BinaryTree<T>& b,typename std::enable_if<isPointer<TT>::value>::type* a)
 {
@@ -167,6 +167,9 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b,typename std::enable_if<isPointer<TT>
 
                 delete root;
             }
+
+            delete this->root;
+            this->root = nullptr;
             isRoot=true;
         }
     }while(isRoot==true);
@@ -178,7 +181,7 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b,typename std::enable_if<isPointer<TT>
 }
 
 //Copy Constructor
-//Parametrized Constructor for taking in a BinaryTree root (data or T being a non pointer)
+//Parametrized Constructor for taking in a BinaryTree (data or T being a non pointer)
 template<class T> template<typename TT>
 BinaryTree<T>::BinaryTree(BinaryTree<T>& b,typename std::enable_if<!isPointer<TT>::value>::type* a)
 {
@@ -263,6 +266,9 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b,typename std::enable_if<!isPointer<TT
 
                 delete root;
             }
+
+            delete this->root;
+            this->root = nullptr;
             isRoot=true;
         }
     }while(isRoot==true);
@@ -324,6 +330,7 @@ template <class T>
 BinaryTree<T>::~BinaryTree()
 {
     //dtor
+    this->clear();
 }
 
 
@@ -420,7 +427,7 @@ int BinaryTree<T>::insert(TT data,typename std::enable_if<isPointer<TT>::value>:
       */
 
 template<class T> template <typename TT>
-int BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<isPointer<TT>::value>::type *a)
+int BinaryTree<T>::insert(std::list<TT> stream, typename std::enable_if<isPointer<TT>::value>::type *a)
 {
     #ifdef DEBUG
     long counter=0;
@@ -436,7 +443,7 @@ int BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<isPoint
         this->root = new Node;
         this->root->id=1;
         this->root->data=stream.front();
-        stream.pop();
+        stream.pop_front();
         this->root->left=this->root->right=nullptr;
         this->id=this->totalNodes=1;
     }
@@ -471,7 +478,7 @@ int BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<isPoint
             temp = new Node;
             temp->id=root.id*2;
             temp->data=stream.front();
-            stream.pop();
+            stream.pop_front();
             temp->left=temp->right=nullptr;
             root->left=temp;
 
@@ -485,17 +492,20 @@ int BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<isPoint
         }
         else
         {
-            if(stream.front == nullptr)
-                return -1;
-            temp = new Node;
-            temp->id=(root.id*2)+1;
-            temp->data=stream.front();
-            stream.pop();
-            temp->left=temp->right=nullptr;
-            root->right=temp;
+            if(!stream.empty())
+            {
+                if(stream.front == nullptr)
+                    return -1;
+                temp = new Node;
+                temp->id=(root.id*2)+1;
+                temp->data=stream.front();
+                stream.pop_front();
+                temp->left=temp->right=nullptr;
+                root->right=temp;
 
-            q.push(root->right);
-            this->totalNodes++;
+                q.push(root->right);
+                this->totalNodes++;
+            }
         }
     }
 
@@ -770,7 +780,7 @@ void BinaryTree<T>::insert(TT data, typename std::enable_if<!isPointer<TT>::valu
 }
 
 template<class T> template <typename TT>
-void BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<!isPointer<TT>::value>::type *a)
+void BinaryTree<T>::insert(std::list<TT> stream, typename std::enable_if<!isPointer<TT>::value>::type *a)
 {
     #ifdef DEBUG
     long counter=0;
@@ -781,7 +791,7 @@ void BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<!isPoi
         this->root = new Node;
         this->root->id=1;
         this->root->data=stream.front();
-        stream.pop();
+        stream.pop_front();
         this->root->left=this->root->right=nullptr;
         this->id=this->totalNodes=1;
     }
@@ -814,7 +824,7 @@ void BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<!isPoi
             temp = new Node;
             temp->id=root->id*2;
             temp->data=stream.front();
-            stream.pop();
+            stream.pop_front();
             temp->left=temp->right=nullptr;
             root->left=temp;
 
@@ -828,15 +838,19 @@ void BinaryTree<T>::insert(std::queue<TT> stream, typename std::enable_if<!isPoi
         }
         else
         {
-            temp = new Node;
-            temp->id=(root->id*2)+1;
-            temp->data=stream.front();
-            stream.pop();
-            temp->left=temp->right=nullptr;
-            root->right=temp;
+            if(!stream.empty())
+            {
+                temp = new Node;
+                temp->id=(root->id*2)+1;
+                temp->data=stream.front();
+                stream.pop_front();
+                temp->left=temp->right=nullptr;
+                root->right=temp;
 
-            q.push(root->right);
-            this->totalNodes++;
+                q.push(root->right);
+                this->totalNodes++;
+            }
+
         }
     }
 
@@ -1088,4 +1102,42 @@ void BinaryTree<T>::createN(unsigned long N)
     }
 }
 
+
+template <class T> template<typename TT>
+void BinaryTree<T>::clear(typename std::enable_if<!isPointer<TT>::value>::type *a)
+{
+    if(this->root == nullptr)
+        return;
+
+    Node *root=this->root;
+    std::queue<Node*> q;
+    q.push(root);
+
+    #ifdef DEBUG
+        std::cout<<std::endl<<"this->root :: "<<this->root<<std::endl;
+        std::cout<<std::endl<<"root :: "<<root<<std::endl;
+        std::cout<<std::endl<<"qroot :: "<<q.front()<<std::endl;
+    #endif
+    while(!q.empty())
+    {
+        root=q.front();
+        q.pop();
+
+        if(root->left !=nullptr)
+        {
+            q.push(root->left);
+        }
+
+        if(root->right != nullptr)
+        {
+            q.push(root->right);
+        }
+
+        delete root;
+    }
+
+    delete this->root;
+    this->root = nullptr;
+
+}
 #endif // BINARYTREE_CPP
