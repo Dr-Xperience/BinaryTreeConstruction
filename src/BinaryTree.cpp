@@ -23,7 +23,7 @@
 #include<iostream>
 #endif // DEBUG
 
-#include <list>
+#include <deque>
 #include "BinaryTree.h"
 
 /** Total Code re-base Now node will be integral part of BinaryTree
@@ -427,7 +427,7 @@ int BinaryTree<T>::insert(TT data,typename std::enable_if<isPointer<TT>::value>:
       */
 
 template<class T> template <typename TT>
-int BinaryTree<T>::insert(std::list<TT> stream, typename std::enable_if<isPointer<TT>::value>::type *a)
+int BinaryTree<T>::insert(std::deque<TT> stream, typename std::enable_if<isPointer<TT>::value>::type *a)
 {
     #ifdef DEBUG
     long counter=0;
@@ -780,7 +780,7 @@ void BinaryTree<T>::insert(TT data, typename std::enable_if<!isPointer<TT>::valu
 }
 
 template<class T> template <typename TT>
-void BinaryTree<T>::insert(std::list<TT> stream, typename std::enable_if<!isPointer<TT>::value>::type *a)
+void BinaryTree<T>::insert(std::deque<TT> stream, typename std::enable_if<!isPointer<TT>::value>::type *a)
 {
     #ifdef DEBUG
     long counter=0;
