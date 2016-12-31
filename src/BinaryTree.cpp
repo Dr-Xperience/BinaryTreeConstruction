@@ -55,8 +55,18 @@ BinaryTree<T>::BinaryTree():root(nullptr)
 
 //Parameterized Constructor for taking in just root
 //Overloaded to differentiate between pointer type and normal
+/**
+    //Alternate Approach (to SFINAE)of checking whether given type is a pointer
+    //by making a default second parameter
+
 template <class T> template<typename TT>
-BinaryTree<T>::BinaryTree(TT data, typename std::enable_if<!isPointer<TT>::value>::type* a)
+BinaryTree<T>::BinaryTree(TT data,typename std::enable_if<!isPointer<TT>::value>::type* a)
+{
+
+}
+**/
+template <class T> template<typename TT,typename std::enable_if<!isPointer<TT>::value>::type* a>
+BinaryTree<T>::BinaryTree(TT data)
 {
             this->root = new Node;
             this->root->id =1;
@@ -65,8 +75,8 @@ BinaryTree<T>::BinaryTree(TT data, typename std::enable_if<!isPointer<TT>::value
             this->id=this->totalNodes=1;
 }
 
-template <class T> template<typename TT>
-BinaryTree<T>::BinaryTree(TT data, typename std::enable_if<isPointer<TT>::value>::type * a)
+template <class T> template<typename TT,typename std::enable_if<isPointer<TT>::value>::type * a>
+BinaryTree<T>::BinaryTree(TT data)
 {
 
         if(data != nullptr)
@@ -83,8 +93,8 @@ BinaryTree<T>::BinaryTree(TT data, typename std::enable_if<isPointer<TT>::value>
 
 //Copy Constructor
 //Parametrized Constructor for taking in a BinaryTree (data or T being a pointer)
-template<class T> template<typename TT>
-BinaryTree<T>::BinaryTree(BinaryTree<T>& b,typename std::enable_if<isPointer<TT>::value>::type* a)
+template<class T> template<typename TT,typename std::enable_if<isPointer<TT>::value>::type* a>
+BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
 {
 #ifdef DEBUG
     long counter=0;
@@ -182,8 +192,8 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b,typename std::enable_if<isPointer<TT>
 
 //Copy Constructor
 //Parametrized Constructor for taking in a BinaryTree (data or T being a non pointer)
-template<class T> template<typename TT>
-BinaryTree<T>::BinaryTree(BinaryTree<T>& b,typename std::enable_if<!isPointer<TT>::value>::type* a)
+template<class T> template<typename TT,typename std::enable_if<!isPointer<TT>::value>::type* a>
+BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
 {
 #ifdef DEBUG
     long counter=0;
@@ -344,8 +354,8 @@ BinaryTree<T>::~BinaryTree()
  insert at first blank location found in tree
 **/
 
-template <class T> template <typename TT>
-int BinaryTree<T>::insert(TT data,typename std::enable_if<isPointer<TT>::value>::type *a)
+template <class T> template <typename TT,typename std::enable_if<isPointer<TT>::value>::type *a>
+int BinaryTree<T>::insert(TT data)
 {
 
     if(this->root == nullptr )
@@ -426,8 +436,8 @@ int BinaryTree<T>::insert(TT data,typename std::enable_if<isPointer<TT>::value>:
       * Will test it by replacing it against the creatN method in memory benchmark
       */
 
-template<class T> template <typename TT>
-int BinaryTree<T>::insert(std::deque<TT> stream, typename std::enable_if<isPointer<TT>::value>::type *a)
+template<class T> template <typename TT, typename std::enable_if<isPointer<TT>::value>::type *a>
+int BinaryTree<T>::insert(std::deque<TT> stream)
 {
     #ifdef DEBUG
     long counter=0;
@@ -515,8 +525,8 @@ int BinaryTree<T>::insert(std::deque<TT> stream, typename std::enable_if<isPoint
 
  return 0;
 }
-template <class T> template <typename TT>
-void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont),typename std::enable_if<isPointer<TT>::value>::type *a)
+template <class T> template <typename TT,typename std::enable_if<isPointer<TT>::value>::type *a>
+void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont))
 {
     Node* root,*temp;
     T data;
@@ -593,8 +603,8 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont
  appendBack create a full binary tree. It takes root of any binary tree and forms a full/complete binary tree from it
 **/
 
-template <class T> template<typename TT>
-void BinaryTree<T>::appendBack(BinaryTree<T>& b, typename std::enable_if<isPointer<TT>::value>::type *a)
+template <class T> template<typename TT, typename std::enable_if<isPointer<TT>::value>::type *a>
+void BinaryTree<T>::appendBack(BinaryTree<T>& b)
 {
 #ifdef DEBUG
     long counter=0;
@@ -715,8 +725,8 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b, typename std::enable_if<isPoint
  insert at first blank location found in tree
 **/
 
-template <class T> template<typename TT>
-void BinaryTree<T>::insert(TT data, typename std::enable_if<!isPointer<TT>::value>::type *a)
+template <class T> template<typename TT, typename std::enable_if<!isPointer<TT>::value>::type *a>
+void BinaryTree<T>::insert(TT data)
 {
 
     if(this->root == nullptr )
@@ -779,8 +789,8 @@ void BinaryTree<T>::insert(TT data, typename std::enable_if<!isPointer<TT>::valu
 
 }
 
-template<class T> template <typename TT>
-void BinaryTree<T>::insert(std::deque<TT> stream, typename std::enable_if<!isPointer<TT>::value>::type *a)
+template<class T> template <typename TT, typename std::enable_if<!isPointer<TT>::value>::type *a>
+void BinaryTree<T>::insert(std::deque<TT> stream)
 {
     #ifdef DEBUG
     long counter=0;
@@ -859,8 +869,8 @@ std::cout<<std::endl<<"Insertion Loop Counter :: "<<counter<<std::endl;
 #endif // DEBUG
 }
 
-template <class T> template <typename TT>
-void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont), typename std::enable_if<!isPointer<TT>::value>::type *a)
+template <class T> template <typename TT, typename std::enable_if<!isPointer<TT>::value>::type *a>
+void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont))
 {
     Node* root,*temp;
     T data;
@@ -936,8 +946,8 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id,bool& skip,bool& cont
  appendBack create a full binary tree. It takes root of any binary tree and forms a full/complete binary tree from it
 **/
 
-template <class T> template<typename TT>
-void BinaryTree<T>::appendBack(BinaryTree<T>& b, typename std::enable_if<!isPointer<TT>::value>::type* a)
+template <class T> template<typename TT, typename std::enable_if<!isPointer<TT>::value>::type* a>
+void BinaryTree<T>::appendBack(BinaryTree<T>& b)
 {
 #ifdef DEBUG
     long counter=0;
@@ -1103,8 +1113,8 @@ void BinaryTree<T>::createN(unsigned long N)
 }
 
 
-template <class T> template<typename TT>
-void BinaryTree<T>::clear(typename std::enable_if<!isPointer<TT>::value>::type *a)
+template <class T> template<typename TT, typename std::enable_if<!isPointer<TT>::value>::type *a>
+void BinaryTree<T>::clear()
 {
     if(this->root == nullptr)
         return;
