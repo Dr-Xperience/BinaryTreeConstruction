@@ -178,7 +178,8 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
                 delete root;
             }
 
-            delete this->root;
+            this->id = 0;
+            this->totalNodes = 0;
             this->root = nullptr;
             isRoot=true;
         }
@@ -277,7 +278,9 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
                 delete root;
             }
 
-            delete this->root;
+//            delete this->root;
+            this->id = 0;
+            this->totalNodes = 0;
             this->root = nullptr;
             isRoot=true;
         }
@@ -1146,7 +1149,9 @@ void BinaryTree<T>::clear()
         delete root;
     }
 
-    delete this->root;
+//    delete this->root;
+    this->id = 0;
+    this->totalNodes = 0;
     this->root = nullptr;
 
 }
