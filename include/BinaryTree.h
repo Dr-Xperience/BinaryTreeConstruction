@@ -21,6 +21,7 @@
 #define BINARYTREE_H
 
 #include <deque>
+#include <type_traits>
 
 /** Total Code re-base Now node will be integral part of BinaryTree
   * And T will signify the datatype of Node's data
