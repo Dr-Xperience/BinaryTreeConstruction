@@ -31,122 +31,116 @@
 
 /** To check whether the given Type T is a pointer **/
 
-template<class T>
+template <class T>
 struct isPointer
 {
-    static const bool value=false;
+  static const bool value = false;
 };
 
-template<class T>
+template <class T>
 struct isPointer<T*>
 {
-    static const bool value=true;
+  static const bool value = true;
 };
 
 template <class T>
 class BinaryTree
 {
-private:
+  private:
+  public:
+  // Constructor
+  BinaryTree();
 
+  // Overloaded parameterised constructor for non pointer
+  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
+  BinaryTree(TT data);
 
-public:
+  // Overloaded parameterised constructor for pointer
+  template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
+  BinaryTree(TT data);
 
-    //Constructor
-    BinaryTree();
+  /**
 
-    //Overloaded parameterised constructor for non pointer
-    template<typename TT = T,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr>
-    BinaryTree(TT data);
+  //Alternate Approach (to SFINAE) of checking whether given type is a pointer
+  //by making a default second parameter
 
-    //Overloaded parameterised constructor for pointer
-    template<typename TT = T,typename std::enable_if<isPointer<TT>::value>::type * = nullptr>
-    BinaryTree(TT data);
+  //Overloaded parameterised constructor for non pointer
+  template<typename TT = T>
+  BinaryTree(TT data,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
 
-    /**
+  //Overloaded parameterised constructor for pointer
+  template<typename TT = T>
+  BinaryTree(TT data,typename std::enable_if<isPointer<TT>::value>::type * = nullptr);
 
-    //Alternate Approach (to SFINAE) of checking whether given type is a pointer
-    //by making a default second parameter
+  **/
 
-    //Overloaded parameterised constructor for non pointer
-    template<typename TT = T>
-    BinaryTree(TT data,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
+  // Overloaded copy constructor for non pointer
+  // BinaryTree(BinaryTree&);
+  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
+  BinaryTree(BinaryTree&);
 
-    //Overloaded parameterised constructor for pointer
-    template<typename TT = T>
-    BinaryTree(TT data,typename std::enable_if<isPointer<TT>::value>::type * = nullptr);
+  // Overloaded copy constructor for pointer
+  // BinaryTree(BinaryTree&);
+  template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
+  BinaryTree(BinaryTree&);
 
-    **/
+  virtual ~BinaryTree();
 
-    //Overloaded copy constructor for non pointer
-    //BinaryTree(BinaryTree&);
-    template<typename TT = T,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr>
-    BinaryTree(BinaryTree&);
+  // Member Functions for T being a pointer type
 
-    //Overloaded copy constructor for pointer
-    //BinaryTree(BinaryTree&);
-    template<typename TT = T,typename std::enable_if<isPointer<TT>::value>::type * = nullptr>
-    BinaryTree(BinaryTree&);
+  /** insert method complexity is N*N that N^2.
+    * This is so because
+    * Worst case scenario, to place Nth node it has to traverse N-(No of leave nodes) nodes
+    */
+  template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
+  int insert(TT data);
 
-    virtual ~BinaryTree();
+  /** Overloaded and Improved insert method which takes a buffer on input values (a std::queue)
+    * And fills it in the empty spaces while traversing BFD
+    * Complexity ?? (Probably should be better, like something around N+m,
+    *                where N is total no. of nodes in tree and m total no of notes in queue)
+    * Will test it by replacing it against the creatN method in memory benchmark
+    */
+  template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
+  int insert(std::deque<TT> stream);
 
-    //Member Functions for T being a pointer type
+  template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
+  void insertInteractive(T (*process)(long id, bool& skip, bool& cont));
 
-    /** insert method complexity is N*N that N^2.
-      * This is so because
-      * Worst case scenario, to place Nth node it has to traverse N-(No of leave nodes) nodes
-      */
-    template<typename TT = T,typename std::enable_if<isPointer<TT>::value>::type * = nullptr>
-    int insert(TT data);
+  template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
+  void appendBack(BinaryTree&);
 
-    /** Overloaded and Improved insert method which takes a buffer on input values (a std::queue)
-      * And fills it in the empty spaces while traversing BFD
-      * Complexity ?? (Probably should be better, like something around N+m,
-      *                where N is total no. of nodes in tree and m total no of notes in queue)
-      * Will test it by replacing it against the creatN method in memory benchmark
-      */
-    template<typename TT = T, typename std::enable_if<isPointer<TT>::value>::type * = nullptr>
-    int insert(std::deque<TT> stream);
+  // Member Function for T being a non pointer type
+  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
+  void insert(TT data);
 
+  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
+  void insert(std::deque<TT> stream);
 
-    template<typename TT = T,typename std::enable_if<isPointer<TT>::value>::type * = nullptr>
-    void insertInteractive(T (*process)(long id,bool& skip,bool& cont));
+  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
+  void insertInteractive(T (*process)(long id, bool& skip, bool& cont));
 
-    template<typename TT = T,typename std::enable_if<isPointer<TT>::value>::type * = nullptr>
-    void appendBack(BinaryTree&);
+  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
+  void appendBack(BinaryTree&);
 
-    //Member Function for T being a non pointer type
-    template<typename TT = T,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr>
-    void insert(TT data);
+  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
+  void clear();
 
-    template<typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type * = nullptr>
-    void insert(std::deque<TT> stream);
+  /** Warning only for benchmarking */
+  void createN(unsigned long n);
 
-    template<typename TT = T,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr>
-    void insertInteractive(T (*process)(long id,bool& skip,bool& cont));
+  protected:
+  struct Node
+  {
+    unsigned long id;
+    T data;
+    Node* left = nullptr;
+    Node* right = nullptr;
+  };
 
-    template<typename TT = T,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr>
-    void appendBack(BinaryTree&);
+  Node* root;
 
-    template<typename TT = T,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr>
-    void clear();
-
-    /** Warning only for benchmarking */
-    void createN(unsigned long n);
-
-protected:
-
-    struct Node
-    {
-        unsigned long id;
-        T data;
-        Node * left = nullptr;
-        Node * right = nullptr;
-    };
-
-    Node* root;
-
-    long id,totalNodes;
-
+  long id, totalNodes;
 };
 
-#endif // BINARYTREE_H
+#endif  // BINARYTREE_H
