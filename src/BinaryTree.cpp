@@ -106,7 +106,7 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
     return;  // throw some sort of exception
 
   std::queue<Node *> q, q1;
-  Node *root, root1, temp;
+  Node *node, root1, temp;
 
   bool isRoot = false;
 
@@ -118,14 +118,14 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
         {
           this->root = new Node;
           *(this->root) = *(b.root);
-          root = this->root;
+          node = this->root;
 
-          q.push(root);
+          q.push(node);
           q1.push(b.root);
 
           while (!q1.empty())
             {
-              root = q.front();
+              node = q.front();
               q.pop();
               root1 = q1.front();
               q1.pop();
@@ -135,9 +135,9 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
                   temp = new Node;
                   *(temp) = *(root1->left);
                   temp->left = temp->right = nullptr;
-                  root->left = temp;
+                  node->left = temp;
 
-                  q.push(root->left);
+                  q.push(node->left);
                   q1.push(root1->left);
                 }
 
@@ -146,9 +146,9 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
                   temp = new Node;
                   *(temp) = *(root1->right);
                   temp->left = temp->right = nullptr;
-                  root->right = temp;
+                  node->right = temp;
 
-                  q.push(root->right);
+                  q.push(node->right);
                   q1.push(root1->right);
                 }
             }
@@ -158,25 +158,25 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
       else
         {
           // delete old tree before copying
-          root = this->root;
-          q.push(root);
+          node = this->root;
+          q.push(node);
 
           while (!q.empty())
             {
-              root = q.front();
+              node = q.front();
               q.pop();
 
-              if (root->left != nullptr)
+              if (node->left != nullptr)
                 {
-                  q.push(root->left);
+                  q.push(node->left);
                 }
 
-              if (root->right != nullptr)
+              if (node->right != nullptr)
                 {
-                  q.push(root->right);
+                  q.push(node->right);
                 }
 
-              delete root;
+              delete node;
             }
 
           this->id = 0;
@@ -206,7 +206,7 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
     return;  // throw some sort of exception
 
   std::queue<Node *> q, q1;
-  Node *root, root1, temp;
+  Node *node, root1, temp;
 
   bool isRoot = false;
 
@@ -218,14 +218,14 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
         {
           this->root = new Node;
           *(this->root) = *(b.root);
-          root = this->root;
+          node = this->root;
 
-          q.push(root);
+          q.push(node);
           q1.push(b.root);
 
           while (!q1.empty())
             {
-              root = q.front();
+              node = q.front();
               q.pop();
               root1 = q1.front();
               q1.pop();
@@ -235,9 +235,9 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
                   temp = new Node;
                   *(temp) = *(root1->left);
                   temp->left = temp->right = nullptr;
-                  root->left = temp;
+                  node->left = temp;
 
-                  q.push(root->left);
+                  q.push(node->left);
                   q1.push(root1->left);
                 }
 
@@ -246,9 +246,9 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
                   temp = new Node;
                   *(temp) = *(root1->right);
                   temp->left = temp->right = nullptr;
-                  root->right = temp;
+                  node->right = temp;
 
-                  q.push(root->right);
+                  q.push(node->right);
                   q1.push(root1->right);
                 }
             }
@@ -258,25 +258,25 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
       else
         {
           // delete old tree before copying
-          root = this->root;
-          q.push(root);
+          node = this->root;
+          q.push(node);
 
           while (!q.empty())
             {
-              root = q.front();
+              node = q.front();
               q.pop();
 
-              if (root->left != nullptr)
+              if (node->left != nullptr)
                 {
-                  q.push(root->left);
+                  q.push(node->left);
                 }
 
-              if (root->right != nullptr)
+              if (node->right != nullptr)
                 {
-                  q.push(root->right);
+                  q.push(node->right);
                 }
 
-              delete root;
+              delete node;
             }
 
           //            delete this->root;
@@ -305,8 +305,8 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
 
     this->root = new Node;
     this->root->data=data;
-    Node* root = this->root;
-    q.push(root);
+    Node* node = this->root;
+    q.push(node);
     q1.push(root1);
 
     while(!q1.empty())
@@ -316,19 +316,19 @@ BinaryTree<T>::BinaryTree(BinaryTree<T>& b)
         #endif // DEBUG
 
         root1 = q1.front(); q1.pop();
-        root = new Type;
-        root = q.front(); q.pop();
+        node = new Type;
+        node = q.front(); q.pop();
 
         if(root1->left != nullptr)
          {
-             root->left=root1->left;
-             q1.push(root1->left);q.push(root->left);
+             node->left=root1->left;
+             q1.push(root1->left);q.push(node->left);
          }
 
          if(root1->right != nullptr)
          {
-             root->right=root1->right;
-             q1.push(root1->right);q.push(root->right);
+             node->right=root1->right;
+             q1.push(root1->right);q.push(node->right);
          }
     }
 
@@ -381,49 +381,49 @@ int BinaryTree<T>::insert(TT data)
   //         return;
   //    }
   //
-  Node *root = this->root, *temp;
+  Node *node = this->root, *temp;
 
   std::queue<Node*> q;
 
-  q.push(root);
+  q.push(node);
 
   while (!q.empty())
     {
-      root = q.front();
+      node = q.front();
       q.pop();
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
-          q.push(root->left);
+          q.push(node->left);
         }
       else
         {
           if (data == nullptr)
             return -1;
           temp = new Node;
-          temp->id = root.id * 2;
+          temp->id = node.id * 2;
           temp->data = data;
           temp->left = temp->right = nullptr;
 
-          root->left = temp;
+          node->left = temp;
           this->totalNodes++;
           break;
         }
 
-      if (root->right != nullptr)
+      if (node->right != nullptr)
         {
-          q.push(root->right);
+          q.push(node->right);
         }
       else
         {
           if (data == nullptr)
             return -1;
           temp = new Node;
-          temp->id = (root.id * 2) + 1;
+          temp->id = (node.id * 2) + 1;
           temp->data = data;
           temp->left = temp->right = nullptr;
 
-          root->right = temp;
+          node->right = temp;
           this->totalNodes++;
           break;
         }
@@ -467,11 +467,11 @@ int BinaryTree<T>::insert(std::deque<TT> stream)
   //         return;
   //    }
   //
-  Node *root = this->root, *temp;
+  Node *node = this->root, *temp;
 
   std::queue<Node*> q;
 
-  q.push(root);
+  q.push(node);
 
   while (!stream.empty())
     {
@@ -479,31 +479,31 @@ int BinaryTree<T>::insert(std::deque<TT> stream)
       counter++;
 #endif  // DEBUG
 
-      root = q.front();
+      node = q.front();
       q.pop();
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
-          q.push(root->left);
+          q.push(node->left);
         }
       else
         {
           if (stream.front == nullptr)
             return -1;
           temp = new Node;
-          temp->id = root.id * 2;
+          temp->id = node.id * 2;
           temp->data = stream.front();
           stream.pop_front();
           temp->left = temp->right = nullptr;
-          root->left = temp;
+          node->left = temp;
 
-          q.push(root->left);
+          q.push(node->left);
           this->totalNodes++;
         }
 
-      if (root->right != nullptr)
+      if (node->right != nullptr)
         {
-          q.push(root->right);
+          q.push(node->right);
         }
       else
         {
@@ -512,13 +512,13 @@ int BinaryTree<T>::insert(std::deque<TT> stream)
               if (stream.front == nullptr)
                 return -1;
               temp = new Node;
-              temp->id = (root.id * 2) + 1;
+              temp->id = (node.id * 2) + 1;
               temp->data = stream.front();
               stream.pop_front();
               temp->left = temp->right = nullptr;
-              root->right = temp;
+              node->right = temp;
 
-              q.push(root->right);
+              q.push(node->right);
               this->totalNodes++;
             }
         }
@@ -534,7 +534,7 @@ template <class T>
 template <typename TT, typename std::enable_if<isPointer<TT>::value>::type* a>
 void BinaryTree<T>::insertInteractive(T (*process)(long id, bool& skip, bool& cont))
 {
-  Node *root, *temp;
+  Node *node, *temp;
   T data;
 //  long id = 1;
   bool cont = true, skip = false;
@@ -555,51 +555,51 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id, bool& skip, bool& co
       this->id = this->totalNodes = 1;
     }
 
-  root = this->root;
+  node = this->root;
   std::queue<Node*> q;
 
-  q.push(root);
+  q.push(node);
 
   while (cont == true && !q.empty())
     {
-      root = q.front();
+      node = q.front();
       q.pop();
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
-          q.push(root->left);
+          q.push(node->left);
         }
       else
         {
-          data = process(root->id * 2, skip, cont);
+          data = process(node->id * 2, skip, cont);
 
           if (skip != true || data != nullptr)
             {
               temp = new Node;
-              temp->id = (root->id) * 2;
+              temp->id = (node->id) * 2;
               temp->data = data;
               temp->left = temp->right = nullptr;
-              root->left = temp;
-              q.push(root->left);
+              node->left = temp;
+              q.push(node->left);
             }
         }
 
-      if (root->right != nullptr)
+      if (node->right != nullptr)
         {
-          q.push(root->right);
+          q.push(node->right);
         }
       else
         {
-          data = process((root->id * 2) + 1, skip, cont);
+          data = process((node->id * 2) + 1, skip, cont);
 
           if (skip == true || data == nullptr)
             {
               temp = new Node;
-              temp->id = ((root->id) * 2) + 1;
+              temp->id = ((node->id) * 2) + 1;
               temp->data = data;
               temp->left = temp->right = nullptr;
-              root->right = temp;
-              q.push(root->right);
+              node->right = temp;
+              q.push(node->right);
             }
         }
     }
@@ -618,7 +618,7 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b)
 #endif  // DEBUG
 
   std::queue<Node *> q, q1;
-  Node *root, root1, temp;
+  Node *node, root1, temp;
 
   if (this->root == nullptr)
     {
@@ -628,22 +628,22 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b)
       this->root->left = nullptr;
       this->root->right = nullptr;
 
-      root = this->root;
-      q.push(root);
+      node = this->root;
+      q.push(node);
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
           q1.push(b.root->left);
         }
-      else if (root->right != nullptr)
+      else if (node->right != nullptr)
         {
           q1.push(b.root->right);
         }
     }
   else
     {
-      root = this->root;
-      q.push(root);
+      node = this->root;
+      q.push(node);
       q1.push(b.root);
     }
 
@@ -653,25 +653,25 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b)
       counter++;
 #endif  // DEBUG
 
-      root = q.front();
+      node = q.front();
       q.pop();
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
-          q.push(root->left);
+          q.push(node->left);
         }
       else
         {
           root1 = q1.front();
           q1.pop();
-          root1.id = root.id * 2;
+          root1.id = node.id * 2;
           temp = new Node;
           *temp = *root1;
           temp->left = nullptr;
           temp->right = nullptr;
 
-          root->left = temp;
-          q.push(root->left);
+          node->left = temp;
+          q.push(node->left);
 
           if (root1->left != nullptr)
             {
@@ -683,9 +683,9 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b)
             }
         }
 
-      if (root->right != nullptr)
+      if (node->right != nullptr)
         {
-          q.push(root->right);
+          q.push(node->right);
         }
       else
         {
@@ -693,14 +693,14 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b)
             break;
           root1 = q1.front();
           q1.pop();
-          root1.id = (root.id * 2) + 1;
+          root1.id = (node.id * 2) + 1;
           temp = new Node;
           *temp = *root1;
           temp->left = nullptr;
           temp->right = nullptr;
 
-          root->right = temp;
-          q.push(root->right);
+          node->right = temp;
+          q.push(node->right);
 
           if (root1->left != nullptr)
             {
@@ -747,45 +747,45 @@ void BinaryTree<T>::insert(TT data)
   //         return;
   //    }
   //
-  Node *root = this->root, *temp;
+  Node *node = this->root, *temp;
 
   std::queue<Node*> q;
 
-  q.push(root);
+  q.push(node);
 
   while (!q.empty())
     {
-      root = q.front();
+      node = q.front();
       q.pop();
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
-          q.push(root->left);
+          q.push(node->left);
         }
       else
         {
           temp = new Node;
-          temp->id = root->id * 2;
+          temp->id = node->id * 2;
           temp->data = data;
           temp->left = temp->right = nullptr;
 
-          root->left = temp;
+          node->left = temp;
           this->totalNodes++;
           break;
         }
 
-      if (root->right != nullptr)
+      if (node->right != nullptr)
         {
-          q.push(root->right);
+          q.push(node->right);
         }
       else
         {
           temp = new Node;
-          temp->id = (root->id * 2) + 1;
+          temp->id = (node->id * 2) + 1;
           temp->data = data;
           temp->left = temp->right = nullptr;
 
-          root->right = temp;
+          node->right = temp;
           this->totalNodes++;
           break;
         }
@@ -815,11 +815,11 @@ void BinaryTree<T>::insert(std::deque<TT> stream)
   //         return;
   //    }
   //
-  Node *root = this->root, *temp;
+  Node *node = this->root, *temp;
 
   std::queue<Node*> q;
 
-  q.push(root);
+  q.push(node);
 
   while (!stream.empty())
     {
@@ -827,42 +827,42 @@ void BinaryTree<T>::insert(std::deque<TT> stream)
       counter++;
 #endif  // DEBUG
 
-      root = q.front();
+      node = q.front();
       q.pop();
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
-          q.push(root->left);
+          q.push(node->left);
         }
       else
         {
           temp = new Node;
-          temp->id = root->id * 2;
+          temp->id = node->id * 2;
           temp->data = stream.front();
           stream.pop_front();
           temp->left = temp->right = nullptr;
-          root->left = temp;
+          node->left = temp;
 
-          q.push(root->left);
+          q.push(node->left);
           this->totalNodes++;
         }
 
-      if (root->right != nullptr)
+      if (node->right != nullptr)
         {
-          q.push(root->right);
+          q.push(node->right);
         }
       else
         {
           if (!stream.empty())
             {
               temp = new Node;
-              temp->id = (root->id * 2) + 1;
+              temp->id = (node->id * 2) + 1;
               temp->data = stream.front();
               stream.pop_front();
               temp->left = temp->right = nullptr;
-              root->right = temp;
+              node->right = temp;
 
-              q.push(root->right);
+              q.push(node->right);
               this->totalNodes++;
             }
         }
@@ -877,7 +877,7 @@ template <class T>
 template <typename TT, typename std::enable_if<!isPointer<TT>::value>::type* a>
 void BinaryTree<T>::insertInteractive(T (*process)(long id, bool& skip, bool& cont))
 {
-  Node *root, *temp;
+  Node *node, *temp;
   T data;
   //    long id=1;
   bool cont = true, skip = false;
@@ -898,51 +898,51 @@ void BinaryTree<T>::insertInteractive(T (*process)(long id, bool& skip, bool& co
       this->id = this->totalNodes = 1;
     }
 
-  root = this->root;
+  node = this->root;
   std::queue<Node*> q;
 
-  q.push(root);
+  q.push(node);
 
   while (cont == true && !q.empty())
     {
-      root = q.front();
+      node = q.front();
       q.pop();
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
-          q.push(root->left);
+          q.push(node->left);
         }
       else
         {
-          data = process(root->id * 2, skip, cont);
+          data = process(node->id * 2, skip, cont);
 
           if (skip == false)
             {
               temp = new Node;
-              temp->id = (root->id) * 2;
+              temp->id = (node->id) * 2;
               temp->data = data;
               temp->left = temp->right = nullptr;
-              root->left = temp;
-              q.push(root->left);
+              node->left = temp;
+              q.push(node->left);
             }
         }
 
-      if (root->right != nullptr)
+      if (node->right != nullptr)
         {
-          q.push(root->right);
+          q.push(node->right);
         }
       else
         {
-          data = process((root->id * 2) + 1, skip, cont);
+          data = process((node->id * 2) + 1, skip, cont);
 
           if (skip == false)
             {
               temp = new Node;
-              temp->id = ((root->id) * 2) + 1;
+              temp->id = ((node->id) * 2) + 1;
               temp->data = data;
               temp->left = temp->right = nullptr;
-              root->right = temp;
-              q.push(root->right);
+              node->right = temp;
+              q.push(node->right);
             }
         }
     }
@@ -961,7 +961,7 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b)
 #endif  // DEBUG
 
   std::queue<Node *> q, q1;
-  Node *root, root1, temp;
+  Node *node, root1, temp;
 
   if (this->root == nullptr)
     {
@@ -971,22 +971,22 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b)
       this->root->left = nullptr;
       this->root->right = nullptr;
 
-      root = this->root;
-      q.push(root);
+      node = this->root;
+      q.push(node);
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
           q1.push(b.root->left);
         }
-      else if (root->right != nullptr)
+      else if (node->right != nullptr)
         {
           q1.push(b.root->right);
         }
     }
   else
     {
-      root = this->root;
-      q.push(root);
+      node = this->root;
+      q.push(node);
       q1.push(b.root);
     }
 
@@ -996,25 +996,25 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b)
       counter++;
 #endif  // DEBUG
 
-      root = q.front();
+      node = q.front();
       q.pop();
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
-          q.push(root->left);
+          q.push(node->left);
         }
       else
         {
           root1 = q1.front();
           q1.pop();
-          root1.id = root.id * 2;
+          root1.id = node.id * 2;
           temp = new Node;
           *temp = *root1;
           temp->left = nullptr;
           temp->right = nullptr;
 
-          root->left = temp;
-          q.push(root->left);
+          node->left = temp;
+          q.push(node->left);
 
           if (root1->left != nullptr)
             {
@@ -1026,9 +1026,9 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b)
             }
         }
 
-      if (root->right != nullptr)
+      if (node->right != nullptr)
         {
-          q.push(root->right);
+          q.push(node->right);
         }
       else
         {
@@ -1036,14 +1036,14 @@ void BinaryTree<T>::appendBack(BinaryTree<T>& b)
             break;
           root1 = q1.front();
           q1.pop();
-          root1.id = (root.id * 2) + 1;
+          root1.id = (node.id * 2) + 1;
           temp = new Node;
           *temp = *root1;
           temp->left = nullptr;
           temp->right = nullptr;
 
-          root->right = temp;
-          q.push(root->right);
+          node->right = temp;
+          q.push(node->right);
 
           if (root1->left != nullptr)
             {
@@ -1070,45 +1070,45 @@ void BinaryTree<T>::createN(unsigned long N)
   this->root->left = this->root->right = nullptr;
   this->id = this->totalNodes = 1;
 
-  Node *root = this->root, *temp;
+  Node *node = this->root, *temp;
 
   std::queue<Node*> q;
 
-  q.push(root);
+  q.push(node);
 
   while (!q.empty())
     {
-      root = q.front();
+      node = q.front();
       q.pop();
 
-      if (root->id >= N)
+      if (node->id >= N)
         break;
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
-          q.push(root->left);
+          q.push(node->left);
         }
       else
         {
           temp = new Node;
-          temp->id = temp->data = root->id * 2;
+          temp->id = temp->data = node->id * 2;
           temp->left = temp->right = nullptr;
-          root->left = temp;
-          q.push(root->left);
+          node->left = temp;
+          q.push(node->left);
           this->totalNodes++;
         }
 
-      if (root->right != nullptr)
+      if (node->right != nullptr)
         {
-          q.push(root->right);
+          q.push(node->right);
         }
       else
         {
           temp = new Node;
-          temp->id = temp->data = (root->id * 2) + 1;
+          temp->id = temp->data = (node->id * 2) + 1;
           temp->left = temp->right = nullptr;
-          root->right = temp;
-          q.push(root->right);
+          node->right = temp;
+          q.push(node->right);
           this->totalNodes++;
         }
     }
@@ -1121,31 +1121,31 @@ void BinaryTree<T>::clear()
   if (this->root == nullptr)
     return;
 
-  Node* root = this->root;
+  Node* node = this->root;
   std::queue<Node*> q;
-  q.push(root);
+  q.push(node);
 
 #ifdef DEBUG
   std::cout << std::endl << "this->root :: " << this->root << std::endl;
-  std::cout << std::endl << "root :: " << root << std::endl;
+  std::cout << std::endl << "node :: " << node << std::endl;
   std::cout << std::endl << "qroot :: " << q.front() << std::endl;
 #endif
   while (!q.empty())
     {
-      root = q.front();
+      node = q.front();
       q.pop();
 
-      if (root->left != nullptr)
+      if (node->left != nullptr)
         {
-          q.push(root->left);
+          q.push(node->left);
         }
 
-      if (root->right != nullptr)
+      if (node->right != nullptr)
         {
-          q.push(root->right);
+          q.push(node->right);
         }
 
-      delete root;
+      delete node;
     }
 
   //    delete this->root;
