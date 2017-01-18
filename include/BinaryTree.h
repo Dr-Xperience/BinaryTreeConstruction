@@ -20,6 +20,10 @@
 #ifndef BINARYTREE_H
 #define BINARYTREE_H
 
+#ifdef DEBUG
+#include <iostream>
+#endif  // DEBUG
+
 #include <deque>
 #include <type_traits>
 
@@ -54,11 +58,11 @@ class BinaryTree
 
   // Overloaded parameterised constructor for non pointer
   template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
-  BinaryTree(TT data);
+  BinaryTree(T data);
 
   // Overloaded parameterised constructor for pointer
   template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
-  BinaryTree(TT data);
+  BinaryTree(T data);
 
   /**
 
@@ -67,11 +71,11 @@ class BinaryTree
 
   //Overloaded parameterised constructor for non pointer
   template<typename TT = T>
-  BinaryTree(TT data,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
+  BinaryTree(T data,typename std::enable_if<!isPointer<TT>::value>::type * = nullptr);
 
   //Overloaded parameterised constructor for pointer
   template<typename TT = T>
-  BinaryTree(TT data,typename std::enable_if<isPointer<TT>::value>::type * = nullptr);
+  BinaryTree(T data,typename std::enable_if<isPointer<TT>::value>::type * = nullptr);
 
   **/
 
@@ -87,14 +91,16 @@ class BinaryTree
 
   virtual ~BinaryTree();
 
-  // Member Functions for T being a pointer type
+  /** ***********************************************************
+         * 		Member Functions for T being a pointer type
+         * **********************************************************/
 
   /** insert method complexity is N*N that N^2.
     * This is so because
     * Worst case scenario, to place Nth node it has to traverse N-(No of leave nodes) nodes
     */
   template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
-  int insert(TT data);
+  int insert(T data);
 
   /** Overloaded and Improved insert method which takes a buffer on input values (a std::queue)
     * And fills it in the empty spaces while traversing BFD
@@ -103,7 +109,7 @@ class BinaryTree
     * Will test it by replacing it against the creatN method in memory benchmark
     */
   template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
-  int insert(std::deque<TT> stream);
+  int insert(std::deque<T> stream);
 
   template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
   void insertInteractive(T (*process)(long id, bool& skip, bool& cont));
@@ -111,12 +117,44 @@ class BinaryTree
   template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr>
   void appendBack(BinaryTree&);
 
-  // Member Function for T being a non pointer type
-  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
-  void insert(TT data);
+  template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr, typename Compare>
+  void deleteNodeGivenDataApproach1(T data, Compare comp)
+  {
+    if (isPointer<T>::value == true)
+      {
+#ifdef DEBUG
+        std::cout << "\npointer T" << std::endl;
+#endif
+      }
+    if (isPointer<TT>::value == true)
+      {
+#ifdef DEBUG
+        std::cout << "\npointer TT" << std::endl;
+#endif
+      }
+    if (isPointer<Compare>::value == true)
+      {
+#ifdef DEBUG
+        std::cout << "\npointer Compare" << std::endl;
+#endif
+      }
+    /// TODO
+  }
+
+  template <typename TT = T, typename std::enable_if<isPointer<TT>::value>::type* = nullptr, typename Compare>
+  void deleteNodeGivenDataApproach2(T data, Compare comp)
+  {
+    /// TODO
+  }
+  /** **************************************************
+   * 	Member Function for T being a non pointer type
+   * ***************************************************/
 
   template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
-  void insert(std::deque<TT> stream);
+  void insert(T data);
+
+  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
+  void insert(std::deque<T> stream);
 
   template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
   void insertInteractive(T (*process)(long id, bool& skip, bool& cont));
@@ -126,6 +164,38 @@ class BinaryTree
 
   template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr>
   void clear();
+
+  /** Time Complexity
+   * Worst Case = O(N)
+   *
+   * Considering Complete Binary Tree
+   * Average Case = O(Max(N,M)) (More like O(Max(N-(N-x),M-y),
+   * 						where x is the id of node's parent & y is the level of node.)
+   *
+   * Considering Complete Binary Tree
+   * Best Case = O(M)
+   *
+   * where, N = Total Number of Nodes
+   *        M = Total Number of Levels
+   * */
+  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr, typename Compare>
+  void deleteNodeGivenDataApproach1(T data, Compare comp);
+
+  /** Time Complexity
+ * Worst Case = O(N)
+ *
+ * Considering Complete Binary Tree
+ * Average Case = O(N+M) (More like O(N-(N-x),M-y),
+ * 						where x is the id of node's parent & y is the level of node.)
+ *
+ * Considering Complete Binary Tree
+ * Best Case = O(M)
+ *
+ * where, N = Total Number of Nodes
+ *        M = Total Number of Levels
+ * */
+  template <typename TT = T, typename std::enable_if<!isPointer<TT>::value>::type* = nullptr, typename Compare>
+  void deleteNodeGivenDataApproach2(T data, Compare comp);
 
   /** Warning only for benchmarking */
   void createN(unsigned long n);
